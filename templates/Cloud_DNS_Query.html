@@ -1,0 +1,139 @@
+				<center>
+					<img src="<TMPL_VAR LOGO_ICON>"><br>
+				</center>
+				<br>
+				<center>
+					<b><TMPL_VAR SMI.HEADER_TEXT></b>
+					<br>
+					<small><TMPL_VAR SMI.DESCRIPTION_TEXT></small>
+					<br><br>
+						  	
+						<table  style="padding:10px; border: 1px solid black; border-radius: 5px; background-color: rgba(109,142,32,.1); display: inline-block;">
+						<tr><td colspan="2" style="cursor:default; text-align:center;"><TMPL_VAR SMI.ENTER_MS_MAC><br><center>
+	<table border=0 style="width:400px; text-align:center;">
+								<tr>
+									<td>
+									<input placeholder="504fxxxxxxxx" id="target_mac"  class="textfield" name="target_mac" type="text" data-validation-error-msg="<TMPL_VAR ERRORS.ERR_INVALID_MAC>" data-validation-rule="(^[Ee][Ee][Ee]000([a-zA-Z0-9]{6})$)|(^504[Ff]([a-fA-F0-9]{8})$)" original-background-color="transparent" style="background-color: transparent; border-radius: 8px 8px 0px 0px; text-align:center">
+						</td>
+					</tr>
+				</table></center>
+</td></tr>
+						
+						<tr class="showhide" ><td style="cursor:default; text-align:right;">IP/Port:</td><td><span><table><tr><td><div style="" contenteditable="true" id="IP" type="text">&nbsp;</div></td><td><img class="showhide" onclick="copyToClipboard('#IP')" src="<TMPL_VAR IMGPATH>/clipboard-copy.png" id="copy_icon" title="<TMPL_VAR SMI.BUTTON_COPY_CLIPBOARD>"></td></tr></table></td></tr>
+						<tr class="showhide" ><td style="cursor:default; text-align:right;">LastUpdated:</td><td><span style="cursor:default;" id="LastUpdated">&nbsp;<span></td></tr>
+						<tr class="showhide" ><td style="cursor:default; text-align:right;">PortOpen:</td><td><span style="cursor:default;" id="PortOpen"><span></td></tr>
+						<tr class="showhide" ><td style="cursor:default; text-align:right;">DNS-Status:</td><td><span style="cursor:default;" id="DNS-Status"></span></td></tr>
+						<tr><td colspan="2" style="cursor:default; text-align:center;"><span style="cursor:default;" id="Error"> </span>&nbsp;</td></tr>
+						<tr><td style="width:50%;"></td><td style="width:50%;"></td></tr>
+					</table>
+					<br>
+							<a id="btnquery" data-role="button" data-inline="true" data-mini="true" data-icon="eye" href="#"><TMPL_VAR SMI.BUTTON_GET_IP></a>
+
+
+
+
+<SCRIPT>
+$(document).ready( function()
+{
+	validate_enable('#target_mac'); 
+    $('#IP').html("");
+	$('#LastUpdated').html("");
+	$('#PortOpen').html("");
+	$('#DNS-Status').html("");
+	$(".showhide").css("visibility","hidden");
+
+$("#target_mac").on('keyup paste input', function(e) {
+
+if ( validate_chk_value( "#target_mac",'keyup','(^[Ee][Ee][Ee]000([a-zA-Z0-9]{6})$)|(^504[Ff]([a-fA-F0-9]{8})$)') )
+{
+	$("#btnquery").attr("disabled","");
+	$("#btnquery").removeClass( "ui-disabled" );
+    $('#IP').html("");
+	$('#LastUpdated').html("");
+	$('#PortOpen').html("");
+	$('#DNS-Status').html("");
+    $('#Error').html("");
+	$(".showhide").css("visibility","hidden");
+}
+else
+	{
+	$("#btnquery").attr("disabled","disabled");
+	$("#btnquery").addClass( "ui-disabled" );
+    $('#IP').html("");
+	$('#LastUpdated').html("");
+	$('#PortOpen').html("");
+	$('#DNS-Status').html("");
+    $('#Error').html("");
+	$(".showhide").css("visibility","hidden");
+	}
+
+});
+	$("#target_mac").trigger( "keyup" );
+
+});
+	
+	
+function copyToClipboard(element) {
+	var $temp = $("<input>");
+	$("body").append($temp);
+	$temp.val($(element).text()).select();
+	document.execCommand("copy");
+	$temp.remove();
+
+}
+							$( "#btnquery" ).click(function ()
+								{
+									$(".showhide").css("visibility","hidden");
+									$('#Error').html("<b><font color='blue'><TMPL_VAR SMI.PLEASE_WAIT></font></b>");
+									if ( validate_chk_value( "#target_mac",'keyup','(^[Ee][Ee][Ee]000([a-zA-Z0-9]{6})$)|(^504[Ff]([a-fA-F0-9]{8})$)') )
+									{
+									$.ajax({url: 'http://dns.loxonecloud.com/?getip', type: 'GET', data: { 'json': true, 'snr':$('#target_mac').val() } }).success(function(data) 
+									{ 
+										
+										if ( data["Code"] == 200 )
+										  {
+										  $('#IP').html(data["IP"]);
+										  $('#LastUpdated').html(data["LastUpdated"]);
+										  $('#PortOpen').html(data["PortOpen"]);
+										  $('#DNS-Status').html(data["DNS-Status"]);
+										  $('#Error').html("<b><font color='green'>OK</font></b>");
+										  $(".showhide").css("visibility","visible");
+										  }
+										  else
+										  {
+										  $('#IP').html("");
+										  $('#LastUpdated').html("");
+										  $('#PortOpen').html("");
+										  $('#DNS-Status').html("");
+										  $('#Error').html("<b><font color='red'>Error "+data["Code"]+"</font></b>");
+										  $(".showhide").css("visibility","hidden");
+										  }	
+										  	}).fail(function(xhr, status, error) {
+										  $('#IP').html("");
+										  $('#LastUpdated').html("");
+										  $('#PortOpen').html("");
+										  $('#DNS-Status').html("");
+										   $('#Error').html("<b><font color='red'>Error: "+error+"</font></b>");
+										   $(".showhide").css("visibility","hidden");
+										});
+								
+								}
+								else
+									{
+										  $('#IP').html("");
+										  $('#LastUpdated').html("");
+										  $('#PortOpen').html("");
+										  $('#DNS-Status').html("");
+										   $('#Error').html("<b><font color='red'>Error: Invalid Serial Number</font></b>");
+										   $(".showhide").css("visibility","hidden");
+										}
+
+								
+								});
+							</SCRIPT>
+							<br><a id="btncancel" data-role="button" data-inline="true" data-mini="true" data-icon="delete" href="/admin/index.cgi"><TMPL_VAR SMI.BUTTON_EXIT></a>
+						<br>
+
+				 </center>
+<small><small><TMPL_VAR VERSION></small></small>
+
