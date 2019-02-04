@@ -19,10 +19,10 @@
 				</table></center>
 </td></tr>
 						
-						<tr class="showhide" ><td style="cursor:default; text-align:right;">IP/Port:</td><td><span><table><tr><td><div style="" contenteditable="true" id="IP" type="text">&nbsp;</div></td><td><img class="showhide" onclick="copyToClipboard('#IP')" src="<TMPL_VAR IMGPATH>/clipboard-copy.png" id="copy_icon" title="<TMPL_VAR SMI.BUTTON_COPY_CLIPBOARD>"></td></tr></table></td></tr>
-						<tr class="showhide" ><td style="cursor:default; text-align:right;">LastUpdated:</td><td><span style="cursor:default;" id="LastUpdated">&nbsp;<span></td></tr>
-						<tr class="showhide" ><td style="cursor:default; text-align:right;">PortOpen:</td><td><span style="cursor:default;" id="PortOpen"><span></td></tr>
-						<tr class="showhide" ><td style="cursor:default; text-align:right;">DNS-Status:</td><td><span style="cursor:default;" id="DNS-Status"></span></td></tr>
+						<tr class="showhide" ><td style="cursor:default; text-align:right;"><TMPL_VAR SMI.IP_PORT></td><td><span><table><tr><td><div style="" contenteditable="true" id="IP" type="text">&nbsp;</div></td><td><img class="showhide" onclick="copyToClipboard('#IP')" src="<TMPL_VAR IMGPATH>/clipboard-copy.png" id="copy_icon" title="<TMPL_VAR SMI.BUTTON_COPY_CLIPBOARD>"></td></tr></table></td></tr>
+						<tr class="showhide" ><td style="cursor:default; text-align:right;"><TMPL_VAR SMI.LAST_UPDATED></td><td><span style="cursor:default;" id="LastUpdated">&nbsp;<span></td></tr>
+						<tr class="showhide" ><td style="cursor:default; text-align:right;"><TMPL_VAR SMI.PORT_OPEN></td><td><span style="cursor:default;" id="PortOpen"><span></td></tr>
+						<tr class="showhide" ><td style="cursor:default; text-align:right;"><TMPL_VAR SMI.DNS_STATUS></td><td><span style="cursor:default;" id="DNS-Status"></span></td></tr>
 						<tr><td colspan="2" style="cursor:default; text-align:center;"><span style="cursor:default;" id="Error"> </span>&nbsp;</td></tr>
 						<tr><td style="width:50%;"></td><td style="width:50%;"></td></tr>
 					</table>
@@ -96,7 +96,7 @@ function copyToClipboard(element) {
 										  $('#LastUpdated').html(data["LastUpdated"]);
 										  $('#PortOpen').html(data["PortOpen"]);
 										  $('#DNS-Status').html(data["DNS-Status"]);
-										  $('#Error').html("<b><font color='green'>OK</font></b>");
+										  $('#Error').html("<b><font color='green'><TMPL_VAR SMI.STATUS_OK></font></b>");
 										  $(".showhide").css("visibility","visible");
 										  }
 										  else
@@ -105,7 +105,7 @@ function copyToClipboard(element) {
 										  $('#LastUpdated').html("");
 										  $('#PortOpen').html("");
 										  $('#DNS-Status').html("");
-										  $('#Error').html("<b><font color='red'>Error "+data["Code"]+"</font></b>");
+										  $('#Error').html("<b><font color='red'><TMPL_VAR SMI.STATUS_ERROR> "+data["Code"]+"</font></b>");
 										  $(".showhide").css("visibility","hidden");
 										  }	
 										  	}).fail(function(xhr, status, error) {
@@ -113,7 +113,7 @@ function copyToClipboard(element) {
 										  $('#LastUpdated').html("");
 										  $('#PortOpen').html("");
 										  $('#DNS-Status').html("");
-										   $('#Error').html("<b><font color='red'>Error: "+error+"</font></b>");
+										   $('#Error').html("<b><font color='red'><TMPL_VAR SMI.STATUS_ERROR> "+error+"</font></b>");
 										   $(".showhide").css("visibility","hidden");
 										});
 								
@@ -124,7 +124,7 @@ function copyToClipboard(element) {
 										  $('#LastUpdated').html("");
 										  $('#PortOpen').html("");
 										  $('#DNS-Status').html("");
-										   $('#Error').html("<b><font color='red'>Error: Invalid Serial Number</font></b>");
+										   $('#Error').html("<b><font color='red'><TMPL_VAR SMI.STATUS_ERROR> <TMPL_VAR ERRORS.INVALID_SERIAL></font></b>");
 										   $(".showhide").css("visibility","hidden");
 										}
 
